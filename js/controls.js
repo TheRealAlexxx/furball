@@ -120,7 +120,9 @@ export class Controls {
 
     const setThr = t => {
       const r = slider.getBoundingClientRect();
+      if (r.height < 4) return;              // hidden UI has a zero rect
       const v = clamp(1 - (t.clientY - r.top) / r.height, 0, 1);
+      if (!Number.isFinite(v)) return;
       this.touchThrottle = v;
       fill.style.height = v * 100 + '%';
       knob.style.bottom = v * 100 + '%';
@@ -131,7 +133,6 @@ export class Controls {
       for (const t of e.changedTouches) if (t.identifier === thrId) setThr(t);
     }, { passive: false });
     slider.addEventListener('touchend', () => { thrId = null; });
-    this.touchThrottle = 0.6;
-    setThr({ clientY: slider.getBoundingClientRect().top + 0.4 * slider.getBoundingClientRect().height });
+    this.touchThrottle = 0.6;   // UI fill is set when the touch UI becomes visible
   }
 }

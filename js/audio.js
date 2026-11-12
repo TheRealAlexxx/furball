@@ -46,6 +46,7 @@ export class GameAudio {
   // continuous per-frame engine/wind
   update(throttle, speed, maxSpeed) {
     if (!this.ctx || this.muted) return;
+    if (!Number.isFinite(throttle) || !Number.isFinite(speed)) return;
     const t = this.ctx.currentTime;
     const rpm = 55 + throttle * 85 + speed * 0.22;
     this.engOsc1.frequency.setTargetAtTime(rpm, t, 0.08);

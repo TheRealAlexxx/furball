@@ -254,7 +254,7 @@ class Game {
 
   update(dt, t) {
     const input = this.testInput || this.controls.input();
-    if (this.isTouch && this.controls.touchThrottle != null) this.player.throttle = this.controls.touchThrottle;
+    if (this.isTouch && Number.isFinite(this.controls.touchThrottle)) this.player.throttle = this.controls.touchThrottle;
 
     // soft ceiling + boundary
     if (this.player.pos.y > CFG.world.ceiling) input.pitch = Math.min(input.pitch, -0.35);
