@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>furball - a 3D dogfighting game</title>
+<meta name="description" content="furball: a fast 3D dogfighting game in the browser. Fly, chase, shoot. Works on desktop and phone.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.js" } }
+</script>
+</head>
+<body>
+<canvas id="scene"></canvas>
+
+<div id="hud" class="hidden">
+  <div id="topbar">
+    <div id="wave">WAVE 1</div>
+    <div id="score">0</div>
+  </div>
+  <div id="killfeed"></div>
+  <div id="crosshair"><div id="pipper"></div><div id="hitmarker"></div></div>
+  <div id="mousecursor" class="hidden"></div>
+  <div id="leftinfo">
+    <div class="gauge"><span class="label">SPD</span><span id="speed">0</span></div>
+    <div class="gauge"><span class="label">ALT</span><span id="alt">0</span></div>
+    <div id="throttlebar"><div id="throttlefill"></div></div>
+  </div>
+  <div id="rightinfo">
+    <div class="gauge"><span class="label">HULL</span></div>
+    <div id="healthbar"><div id="healthfill"></div></div>
+  </div>
+  <canvas id="radar" width="150" height="150"></canvas>
+  <div id="banner" class="hidden"></div>
+  <div id="warn" class="hidden">RETURN TO THE FIGHT</div>
+  <div id="vignette"></div>
+  <button id="pausebtn" aria-label="pause">II</button>
+</div>
+
+<div id="touchui" class="hidden">
+  <div id="stick"><div id="sticknub"></div></div>
+  <button id="firebtn">FIRE</button>
+  <div id="thrslider"><div id="thrfill"></div><div id="thrknob"></div></div>
+</div>
+
+<div id="menu" class="overlay">
+  <h1>FURBALL</h1>
+  <p class="tag">a 3D dogfighting game</p>
+  <div class="controls-cols">
+    <div class="col">
+      <h2>desktop</h2>
+      <ul>
+        <li><b>mouse</b> steer</li>
+        <li><b>W / S</b> throttle</li>
+        <li><b>A / D</b> rudder</li>
+        <li><b>click / space</b> fire</li>
+        <li><b>esc</b> pause</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h2>phone</h2>
+      <ul>
+        <li><b>left stick</b> steer</li>
+        <li><b>right slider</b> throttle</li>
+        <li><b>FIRE</b> button shoots</li>
+      </ul>
+    </div>
+  </div>
+  <p class="hint">line up the pipper ahead of a bandit and hold fire.<br>watch your speed - slow planes stall.</p>
+  <button id="flybtn" class="bigbtn">FLY</button>
+  <p class="credits">code, models and sound generated in-page · three.js (MIT)</p>
+</div>
+
+<div id="gameover" class="overlay hidden">
+  <h1>SHOT DOWN</h1>
+  <p id="finalscore" class="tag"></p>
+  <p id="bestscore" class="hint"></p>
+  <button id="retrybtn" class="bigbtn">FLY AGAIN</button>
+</div>
+
+<div id="paused" class="overlay hidden">
+  <h1>PAUSED</h1>
+  <button id="resumebtn" class="bigbtn">RESUME</button>
+  <button id="quitbtn" class="smallbtn">quit to menu</button>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
