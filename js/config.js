@@ -45,8 +45,8 @@ export const CFG = {
     fireCone: 0.11,       // rad off-nose to open fire
     bulletSpeed: 640,
     damage: 2.1,
-    burstOn: 0.55, burstOff: 0.85,
-    aimErrorBase: 0.035,  // rad, scaled by skill
+    burstOn: 0.7, burstOff: 0.8,
+    aimErrorBase: 0.03,  // rad, scaled by skill
     evadeHp: 26,
   },
   waves: {
@@ -72,6 +72,9 @@ export const QUALITY = {
 };
 
 export function pickQuality() {
+  // explicit override for weak devices: ?q=low|medium|high
+  const q = new URLSearchParams(location.search).get('q');
+  if (q && QUALITY[q]) return q;
   const coarse = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
   const small = Math.min(screen.width, screen.height) < 820;
   if (coarse && small) return 'medium';

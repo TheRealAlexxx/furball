@@ -363,7 +363,7 @@ class Game {
 
   _playerTarget() {
     return {
-      pos: this.player.pos, radius: 4.6, alive: this.state === 'playing',
+      pos: this.player.pos, radius: 5.2, alive: this.state === 'playing',
       onHit: dmg => this._damagePlayer(dmg),
     };
   }
