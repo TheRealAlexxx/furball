@@ -68,6 +68,9 @@ class Game {
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 0.5, CFG.world.fogFar * 2.2);
     this.world = buildWorld(this.scene, this.quality);
+    // small fill light riding with the camera so the player's own plane isn't a silhouette
+    this.fill = new THREE.PointLight(0xfff6e8, 0.7, 70);
+    this.scene.add(this.fill);
     this.guns = new GunSystem(this.scene);
     this.particles = new ParticleFX(this.scene, Math.round(CFG.fx.particles * this.quality.particleMul));
     this.smoke = new SmokeFX(this.scene);
@@ -183,10 +186,12 @@ class Game {
     const base = ahead ? pHeading + Math.PI : pHeading;   // ahead of player = they fly toward us
     const ang = base + (Math.random() - 0.5) * (ahead ? 2.2 : 1.2);
     const dist = 950 + Math.random() * 750;
+    const sx = this.player.pos.x + Math.cos(ang) * dist;
+    const sz = this.player.pos.z + Math.sin(ang) * dist;
     model.pos.set(
-      this.player.pos.x + Math.cos(ang) * dist,
-      clamp(this.player.pos.y + (Math.random() - 0.5) * 600, 420, 1400),
-      this.player.pos.z + Math.sin(ang) * dist
+      sx,
+      Math.max(clamp(this.player.pos.y + (Math.random() - 0.5) * 600, 420, 1400), heightAt(sx, sz) + 260),
+      sz
     );
     model.speed = ENEMY_CFG.maxSpeed * CFG.enemy.cruise;
     model.throttle = 0.8;
@@ -248,6 +253,7 @@ class Game {
     this.time = now / 1000;
 
     if (this.state === 'playing') this.update(dt, now / 1000);
+    else if (this.state === 'menu') this._menuCamera(now / 1000, dt);
     this.renderer.render(this.scene, this.camera);
     this._trackPerf(dt);
   }
@@ -420,6 +426,20 @@ class Game {
     if (dist < 900) this.audio.enemyGun();
   }
 
+  // slow orbit around the parked plane behind the menu
+  _menuCamera(t, dt) {
+    const p = this.player.pos;
+    const a = t * 0.11;
+    this.camera.position.set(p.x + Math.cos(a) * 22, p.y + 5.5, p.z + Math.sin(a) * 22);
+    const g = heightAt(this.camera.position.x, this.camera.position.z);
+    this.camera.position.y = Math.max(this.camera.position.y, g + 4);
+    this.camera.lookAt(p.x, p.y + 1, p.z);
+    this.world.update(dt, p);
+    this.playerMesh.position.copy(p);
+    this.playerMesh.quaternion.copy(this.player.quat);
+    this.playerParts.prop.rotation.z += dt * 30;
+  }
+
   _updateCamera(dt) {
     const fwd = this.player.forward;
     const desired = _v.copy(this.player.pos).addScaledVector(fwd, -13.5).addScaledVector(this.player.up, 3.4);
@@ -435,6 +455,7 @@ class Game {
     }
     const look = _v2.copy(this.player.pos).addScaledVector(fwd, 26);
     this.camera.lookAt(look);
+    this.fill.position.copy(this.camera.position);
     const targetFov = 66 + clamp(this.player.speed / CFG.player.maxSpeed, 0, 1) * 16;
     if (Math.abs(this.camera.fov - targetFov) > 0.4) {
       this.camera.fov += (targetFov - this.camera.fov) * damp(4, dt);
@@ -459,6 +480,17 @@ class Game {
         pipper = { x: _v.x * innerWidth / 2, y: -_v.y * innerHeight / 2 };
       }
     }
+    // enemy markers (screen-space diamonds with distance)
+    const markerList = [];
+    for (const e of this.enemies) {
+      if (!e.alive) continue;
+      const d = e.pos.distanceTo(this.player.pos);
+      _v.copy(e.pos).project(this.camera);
+      if (_v.z < 1 && Math.abs(_v.x) < 0.97 && Math.abs(_v.y) < 0.97) {
+        markerList.push({ sx: (_v.x * 0.5 + 0.5) * innerWidth, sy: (-_v.y * 0.5 + 0.5) * innerHeight, dist: d });
+      }
+    }
+    this.hud.setMarkers(markerList);
     const heading = Math.atan2(this.player.forward.x, -this.player.forward.z);
     this.hud.update(1 / 60, {
       speed: this.player.speed, alt: this.player.pos.y - heightAt(this.player.pos.x, this.player.pos.z),

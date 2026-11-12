@@ -83,5 +83,5 @@ export function buildPlane({ body = 0x5a6b46, wing = 0x4c5c3c, accent = 0xd8c24a
   return { group: g, prop, guns, length: 11, wingspan: 9.4 };
 }
 
-export const PLAYER_LIVERY = { body: 0x5a6b46, wing: 0x4c5c3c, accent: 0xd8c24a, canopy: 0x9fd4e8 };
-export const ENEMY_LIVERY = { body: 0x6e6f78, wing: 0x595a63, accent: 0xb03030, canopy: 0x8fb8c8 };
+export const PLAYER_LIVERY = { body: 0x77875c, wing: 0x68784f, accent: 0xe8d25a, canopy: 0xaee0f2 };
+export const ENEMY_LIVERY = { body: 0x8d8e98, wing: 0x74747e, accent: 0xd04040, canopy: 0x9fc8d8 };

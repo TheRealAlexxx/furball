@@ -72,9 +72,9 @@ export function buildWorld(scene, quality) {
   scene.fog = new THREE.Fog(0xa8c4dc, CFG.world.fogNear, CFG.world.fogFar);
   scene.background = new THREE.Color(0x9cc8e8);
 
-  const hemi = new THREE.HemisphereLight(0xbfd9ff, 0x54683f, 0.95);
+  const hemi = new THREE.HemisphereLight(0xcfe4ff, 0x6a7c52, 1.35);
   scene.add(hemi);
-  const sun = new THREE.DirectionalLight(0xfff2dd, 1.6);
+  const sun = new THREE.DirectionalLight(0xfff2dd, 2.1);
   sun.position.set(-0.4, 0.8, 0.35).multiplyScalar(5000);
   scene.add(sun);
   scene.add(makeSkyDome());

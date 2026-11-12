@@ -81,6 +81,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0e14;
 /* overlays */
 .overlay { position: fixed; inset: 0; z-index: 10; display: flex; flex-direction: column;
   align-items: center; justify-content: center; text-align: center; padding: 20px;
+  overflow-y: auto;
   background: radial-gradient(ellipse at 50% 35%, rgba(20,34,44,0.88), rgba(5,8,12,0.96)); }
 .overlay h1 { font-size: clamp(42px, 9vw, 84px); letter-spacing: 12px; color: #ffd75e;
   text-shadow: 0 0 24px rgba(255,180,60,0.35); }
@@ -98,10 +99,40 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0e14;
   background: none; border: 1px solid #567; color: #9fc3ab; padding: 8px 20px; border-radius: 6px; }
 .credits { position: absolute; bottom: 12px; font-size: 11px; color: #56707a; }
 
+#markers { position: absolute; inset: 0; overflow: hidden; }
+.marker { position: absolute; transform: translate(-50%, -50%); text-align: center; pointer-events: none; }
+.marker .diamond { width: 12px; height: 12px; margin: 0 auto; border: 2px solid #ff5f4d;
+  transform: rotate(45deg); box-shadow: 0 0 5px #000; }
+.marker .dist { font-size: 10px; color: #ffb3b3; text-shadow: 0 0 4px #000; margin-top: 3px; }
+
 @media (max-width: 700px) {
-  #radar { width: 108px; height: 108px; bottom: auto; top: 54px; }
-  #leftinfo { bottom: auto; top: 54px; font-size: 12px; }
-  #rightinfo { bottom: auto; top: 118px; font-size: 12px; }
-  #healthbar { width: 100px; }
-  #killfeed { font-size: 11px; top: 150px; }
+  #radar { width: 84px; height: 84px; bottom: auto; top: 50px; }
+  #leftinfo { bottom: auto; top: 50px; font-size: 11px; }
+  #rightinfo { bottom: auto; top: 102px; font-size: 11px; }
+  #healthbar { width: 88px; height: 8px; }
+  #killfeed { font-size: 10px; top: 134px; max-width: 34vw; }
+  #throttlebar { width: 88px; }
+  #thrslider { width: 26px; height: 24vh; top: 30vh; right: 3vw; }
+  #stick { width: 108px; height: 108px; left: 6vw; bottom: 9vh; }
+  #sticknub { width: 44px; height: 44px; }
+  #firebtn { width: 80px; height: 80px; right: 6vw; bottom: 9vh; font-size: 14px; }
+}
+@media (max-width: 900px) and (orientation: landscape) and (pointer: coarse) {
+  #radar { width: 76px; height: 76px; top: auto; bottom: 8px; }
+  #leftinfo { top: 46px; }
+  #rightinfo { top: 46px; right: 14vw; }
+  #thrslider { height: 36vh; top: 30vh; }
+  #stick { bottom: 6vh; }
+  #firebtn { bottom: 6vh; }
+}
+
+/* short screens (phone landscape) */
+@media (max-height: 480px) {
+  .overlay h1 { font-size: 34px; letter-spacing: 7px; }
+  .tag { font-size: 12px; }
+  .controls-cols { gap: 28px; margin: 10px 0 4px; }
+  .controls-cols ul { font-size: 12px; line-height: 1.5; }
+  .hint { margin: 8px 0 12px; font-size: 11px; }
+  .bigbtn { font-size: 17px; padding: 10px 36px; letter-spacing: 4px; }
+  .credits { display: none; }
 }

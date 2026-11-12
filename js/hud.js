@@ -22,6 +22,31 @@ export class HUD {
     this.rctx = this.el.radar.getContext('2d');
     this.bannerT = 0;
     this.hitT = 0;
+    // pooled enemy markers
+    this.markerBox = document.getElementById('markers');
+    this.markers = [];
+    for (let i = 0; i < 7; i++) {
+      const d = document.createElement('div');
+      d.className = 'marker';
+      d.innerHTML = '<div class="diamond"></div><div class="dist"></div>';
+      d.style.display = 'none';
+      this.markerBox.appendChild(d);
+      this.markers.push(d);
+    }
+  }
+
+  // blips: [{sx, sy, dist}] screen-space positions, or fewer than pool size
+  setMarkers(list) {
+    for (let i = 0; i < this.markers.length; i++) {
+      const m = this.markers[i];
+      if (i < list.length) {
+        m.style.display = 'block';
+        m.style.left = list[i].sx + 'px';
+        m.style.top = list[i].sy + 'px';
+        m.children[1].textContent = Math.round(list[i].dist / 100) / 10 + 'km';
+        m.style.opacity = list[i].dist < 2500 ? 0.95 : 0.5;
+      } else m.style.display = 'none';
+    }
   }
 
   show() { this.el.hud.classList.remove('hidden'); }
