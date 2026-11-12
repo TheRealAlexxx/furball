@@ -1,0 +1,12 @@
+{
+  "name": "furball",
+  "version": "0.1.0",
+  "description": "a fast 3D dogfighting game in the browser - desktop and phone",
+  "type": "module",
+  "scripts": {
+    "pretest": "node scripts/link-three.mjs",
+    "test": "node --test",
+    "start": "python3 -m http.server 8080"
+  },
+  "license": "MIT"
+}
