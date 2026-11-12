@@ -45,8 +45,8 @@ export const CFG = {
     fireCone: 0.11,       // rad off-nose to open fire
     bulletSpeed: 640,
     damage: 2.1,
-    burstOn: 0.7, burstOff: 0.8,
-    aimErrorBase: 0.03,  // rad, scaled by skill
+    burstOn: 0.9, burstOff: 0.7,
+    aimErrorBase: 0.012,  // rad, scaled by skill
     evadeHp: 26,
   },
   waves: {

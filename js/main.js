@@ -422,7 +422,9 @@ class Game {
     dir.z += (Math.random() - 0.5) * err * 2;
     dir.normalize();
     const origin = e.pos.clone().addScaledVector(e.model.forward, 6);
-    this.guns.fire(origin, dir, CFG.enemy.bulletSpeed, 'enemy', CFG.enemy.damage, e.model.velocity);
+    // no velocity inheritance for AI guns: the lead solution assumes the
+    // muzzle velocity, inheriting it systematically overshoots the lead point
+    this.guns.fire(origin, dir, CFG.enemy.bulletSpeed, 'enemy', CFG.enemy.damage);
     if (dist < 900) this.audio.enemyGun();
   }
 
